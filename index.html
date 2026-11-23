@@ -1,0 +1,373 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Novel World | Biblioteca de Light Novels</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #101018;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+header {
+    background: #191925;
+    padding: 20px 8%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.logo {
+    color: #a78bfa;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 18px;
+}
+
+.hero {
+    padding: 65px 8%;
+    background: linear-gradient(120deg, #292044, #11111d);
+}
+
+.hero h1 {
+    font-size: 38px;
+    margin-bottom: 15px;
+}
+
+.hero p {
+    color: #c5c5d3;
+    max-width: 550px;
+    line-height: 1.6;
+}
+
+.container {
+    padding: 35px 8%;
+}
+
+.search {
+    width: 100%;
+    padding: 14px;
+    border-radius: 8px;
+    border: 1px solid #39394c;
+    background: #20202d;
+    color: white;
+    margin: 20px 0 30px;
+    font-size: 16px;
+}
+
+.novels {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 22px;
+}
+
+.card {
+    background: #1c1c29;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 5px 20px #0008;
+}
+
+.card img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    background: #29293a;
+}
+
+.card-info {
+    padding: 15px;
+}
+
+.card h3 {
+    margin-bottom: 8px;
+    font-size: 17px;
+}
+
+.card p {
+    color: #aaaabb;
+    font-size: 13px;
+}
+
+button {
+    background: #8b5cf6;
+    color: white;
+    border: none;
+    padding: 11px 18px;
+    border-radius: 7px;
+    cursor: pointer;
+    margin-top: 12px;
+}
+
+button:hover {
+    background: #7040d8;
+}
+
+.hidden {
+    display: none;
+}
+
+#details, #reader {
+    padding: 35px 8%;
+    line-height: 1.8;
+}
+
+#details img {
+    width: 180px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.chapter {
+    background: #20202d;
+    padding: 13px;
+    margin: 10px 0;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.chapter:hover {
+    background: #343047;
+}
+
+#chapterText {
+    background: #191925;
+    padding: 25px;
+    border-radius: 10px;
+    white-space: pre-wrap;
+    line-height: 2;
+    font-size: 17px;
+    margin-top: 20px;
+}
+
+footer {
+    text-align: center;
+    padding: 30px;
+    color: #777;
+    background: #191925;
+    margin-top: 50px;
+}
+
+@media(max-width:600px) {
+    .hero h1 {
+        font-size: 29px;
+    }
+    header {
+        justify-content: center;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">📚 Novel World</div>
+    <nav>
+        <a href="#" onclick="home()">Início</a>
+        <a href="#biblioteca">Biblioteca</a>
+    </nav>
+</header>
+
+<section class="hero">
+    <h1>Entre em novos mundos!</h1>
+    <p>
+        Descubra histórias incríveis, aventuras fantásticas
+        e mundos diferentes através das Light Novels.
+        Leia suas histórias favoritas gratuitamente!
+    </p>
+</section>
+
+<main id="home" class="container">
+    <h2 id="biblioteca">📖 Biblioteca de Light Novels</h2>
+
+    <input
+        class="search"
+        type="text"
+        id="search"
+        placeholder="Pesquisar uma Light Novel..."
+        oninput="renderNovels()"
+    >
+
+    <div class="novels" id="novelList"></div>
+</main>
+
+<section id="details" class="hidden">
+    <button onclick="home()">← Voltar</button>
+    <div id="novelDetails"></div>
+</section>
+
+<section id="reader" class="hidden">
+    <button onclick="backToDetails()">← Voltar aos capítulos</button>
+    <h2 id="chapterTitle"></h2>
+    <div id="chapterText"></div>
+    <button onclick="nextChapter()">Próximo capítulo →</button>
+</section>
+
+<footer>
+    © 2026 Novel World - Todas as histórias em um só lugar.
+</footer>
+
+<script>
+
+// ADICIONE SUAS LIGHT NOVELS AQUI
+
+const novels = [
+    {
+        id: 1,
+        title: "Minha Primeira Light Novel",
+        author: "Seu nome",
+        cover: "https://placehold.co/400x600/292044/ffffff?text=Minha+Novel",
+        description: "Uma aventura incrível em um mundo cheio de mistérios, magia e personagens inesquecíveis.",
+        chapters: [
+            {
+                title: "Capítulo 1 - O Começo",
+                text: `Era uma vez, em um mundo distante...
+
+Aqui começa a sua história.
+
+Substitua este texto pelo conteúdo do seu capítulo.`
+            },
+            {
+                title: "Capítulo 2 - Uma Nova Jornada",
+                text: `O protagonista finalmente decidiu partir...
+
+Continue sua história aqui.`
+            }
+        ]
+    },
+
+    {
+        id: 2,
+        title: "Aventura em Outro Mundo",
+        author: "Seu nome",
+        cover: "https://placehold.co/400x600/352044/ffffff?text=Outra+Novel",
+        description: "Um jovem é transportado para outro mundo e precisa descobrir seu verdadeiro destino.",
+        chapters: [
+            {
+                title: "Capítulo 1 - O Despertar",
+                text: "O jovem abriu os olhos e percebeu que não estava mais em seu mundo..."
+            }
+        ]
+    }
+];
+
+let currentNovel = null;
+let currentChapter = 0;
+
+function renderNovels() {
+    const list = document.getElementById("novelList");
+    const search = document.getElementById("search").value.toLowerCase();
+
+    list.innerHTML = "";
+
+    novels.filter(n => n.title.toLowerCase().includes(search))
+    .forEach(novel => {
+        list.innerHTML += `
+            <div class="card" onclick="openNovel(${novel.id})">
+                <img src="${novel.cover}" alt="Capa de ${novel.title}">
+                <div class="card-info">
+                    <h3>${novel.title}</h3>
+                    <p>Autor: ${novel.author}</p>
+                    <button>Ver Novel</button>
+                </div>
+            </div>
+        `;
+    });
+}
+
+function openNovel(id) {
+    currentNovel = novels.find(n => n.id === id);
+
+    document.getElementById("home").classList.add("hidden");
+    document.getElementById("details").classList.remove("hidden");
+    document.getElementById("reader").classList.add("hidden");
+
+    let html = `
+        <img src="${currentNovel.cover}">
+        <h1>${currentNovel.title}</h1>
+        <p>Autor: ${currentNovel.author}</p>
+        <br>
+        <h3>Sinopse</h3>
+        <p>${currentNovel.description}</p>
+        <br>
+        <h2>📚 Capítulos</h2>
+    `;
+
+    currentNovel.chapters.forEach((chapter, index) => {
+        html += `
+            <div class="chapter" onclick="readChapter(${index})">
+                ${chapter.title}
+            </div>
+        `;
+    });
+
+    document.getElementById("novelDetails").innerHTML = html;
+    window.scrollTo(0, 0);
+}
+
+function readChapter(index) {
+    currentChapter = index;
+
+    document.getElementById("details").classList.add("hidden");
+    document.getElementById("reader").classList.remove("hidden");
+
+    document.getElementById("chapterTitle").innerText =
+        currentNovel.chapters[index].title;
+
+    document.getElementById("chapterText").innerText =
+        currentNovel.chapters[index].text;
+
+    window.scrollTo(0, 0);
+}
+
+function nextChapter() {
+    if (currentChapter < currentNovel.chapters.length - 1) {
+        readChapter(currentChapter + 1);
+    } else {
+        alert("Você chegou ao último capítulo!");
+    }
+}
+
+function backToDetails() {
+    document.getElementById("reader").classList.add("hidden");
+    document.getElementById("details").classList.remove("hidden");
+    window.scrollTo(0, 0);
+}
+
+function home() {
+    document.getElementById("home").classList.remove("hidden");
+    document.getElementById("details").classList.add("hidden");
+    document.getElementById("reader").classList.add("hidden");
+    window.scrollTo(0, 0);
+}
+
+renderNovels();
+
+</script>
+
+</body>
+</html>
